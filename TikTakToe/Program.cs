@@ -97,22 +97,28 @@ namespace TikTakToe
             }
         }
 
-        static void Main(string[] args)
+        static int Game() // 1 или 2 победа игрока, 0 - ничья
         {
-            byte[,] field = new byte[3, 3];
+            byte[,] field = new byte[SIZE, SIZE];
             byte i, j;
+            int steps = 0;
             byte player = 2; // ход крестиков
             showfield(field);
             while (!IsGameOver(field, player))
             {
-                if(IsRightInput(out i, out j))
+                if(steps == SIZE * SIZE)
+                {
+                    return 0;
+                }
+                if (IsRightInput(out i, out j))
                 {
                     if (field[i, j] == 0)
                     {
                         player = (byte)(player % 2 + 1); // переход к следующему игроку
                         field[i, j] = player;
+                        steps++;
                         showfield(field);
-                        
+
                     }
                     else
                     {
@@ -124,6 +130,21 @@ namespace TikTakToe
                     Console.WriteLine("Плохие координаты");
                 }
             }
+            return player;
+        }
+        
+        static void Main(string[] args)
+        {
+            int result = Game();
+            if(result == 0)
+            {
+                Console.WriteLine("Ничья");
+            }
+            else
+            {
+                Console.WriteLine("Победил - " + result);
+            }
+            
         }
     }
 }
