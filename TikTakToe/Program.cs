@@ -8,6 +8,8 @@ namespace TikTakToe
 {
     class Program
     {
+        const byte SIZE = 3; // размер поля
+        
         static void showfield(byte[,] mas)
         {
             for (int i = 0; i < mas.GetLength(0); i++)
@@ -20,8 +22,58 @@ namespace TikTakToe
             }
         }
 
-        static bool IsGameOver(byte[,] mas)
+        static bool IsGameOver(byte[,] mas, byte player)
         {
+            for (int j = 0; j < SIZE; j++) // проверка по вертикали и горизнтали
+            {
+                int k_str = 0;
+                int k_stlb = 0;
+                for (int i = 0; i < SIZE; i++)
+                {
+                    if (mas[j, i] == player)
+                    {
+                        k_str++;
+                    }
+                    if(mas[i, j] == player)
+                    {
+                        k_stlb++;
+                    }
+                if (k_str == SIZE)
+                {
+
+                        Console.WriteLine(player);
+                        return true;
+                }
+                if(k_stlb == SIZE)
+                {
+                    return true;
+                }
+                }
+            }
+
+            // проверка по диагонали
+            int k_maindiag = 0;
+            int k_pobochdiag = 0;
+            for (int i = 0; i < SIZE; i++)
+            {
+                if (mas[i, i] == player)
+                {
+                    k_maindiag++;
+                }
+                if(mas[i, SIZE - i -1] == player)
+                {
+                    k_pobochdiag++;
+                }
+            }
+            if(k_maindiag == 3)
+            {
+                return true;
+            }
+            if(k_pobochdiag == 3)
+            {
+                return true;
+            }
+
             return false;
         }
 
@@ -49,15 +101,23 @@ namespace TikTakToe
         {
             byte[,] field = new byte[3, 3];
             byte i, j;
-            byte player = 1; // ход крестиков
+            byte player = 2; // ход крестиков
             showfield(field);
-            while (!IsGameOver(field))
+            while (!IsGameOver(field, player))
             {
                 if(IsRightInput(out i, out j))
                 {
-                    field[i, j] = player;
-                    showfield(field);
-                    player = (byte)(player % 2 + 1); // переход к следующему игроку
+                    if (field[i, j] == 0)
+                    {
+                        player = (byte)(player % 2 + 1); // переход к следующему игроку
+                        field[i, j] = player;
+                        showfield(field);
+                        
+                    }
+                    else
+                    {
+                        Console.WriteLine("Поле занято");
+                    }
                 }
                 else
                 {
